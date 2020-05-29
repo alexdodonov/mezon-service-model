@@ -1,34 +1,5 @@
 <?php
-
-class PdoCrudMock extends \Mezon\PdoCrud\PdoCrud
-{
-
-    public $selectResult = [];
-
-    public function select(
-        string $fields,
-        string $tableNames,
-        string $where = '1 = 1',
-        int $from = 0,
-        int $limit = 1000000): array
-    {
-        return $this->selectResult;
-    }
-}
-
-class CustomFieldsModelMock extends \Mezon\Service\CustomFieldsModel
-{
-
-    public $selectResult = [];
-
-    public function getConnection(string $connectionName = 'default-db-connection')
-    {
-        $mock = new \PdoCrudMock();
-        $mock->selectResult = $this->selectResult;
-
-        return $mock;
-    }
-}
+namespace Mezon\Service\Tests;
 
 class CustomFieldsModelUnitTest extends \PHPUnit\Framework\TestCase
 {
@@ -79,7 +50,7 @@ class CustomFieldsModelUnitTest extends \PHPUnit\Framework\TestCase
     public function testGetExistingCustomField(array $data, string $expectedResult): void
     {
         // setup
-        $model = new \CustomFieldsModelMock('entity');
+        $model = new CustomFieldsModelMock('entity');
         $model->selectResult = $data;
 
         // test body
@@ -95,7 +66,7 @@ class CustomFieldsModelUnitTest extends \PHPUnit\Framework\TestCase
     public function testCustomFieldExists(): void
     {
         // setup
-        $model = new \CustomFieldsModelMock('entity');
+        $model = new CustomFieldsModelMock('entity');
         $model->selectResult = [
             $this->customField('existing-field', 1)
         ];

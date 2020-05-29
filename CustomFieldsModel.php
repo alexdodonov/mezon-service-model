@@ -92,6 +92,7 @@ class CustomFieldsModel
         '1=1'
     ])
     {
+        // TODO make filter be a list of fields to be deleted
         $condition = implode(' AND ', array_merge($filter, [
             'object_id = ' . $objectId
         ]));
