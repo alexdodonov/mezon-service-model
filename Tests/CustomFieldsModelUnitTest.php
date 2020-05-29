@@ -34,6 +34,17 @@ class CustomFieldsModelUnitTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
+     * Data compilator
+     */
+    protected function customField(string $fieldName, string $fieldValue): array
+    {
+        return [
+            'field_name' => $fieldName,
+            'field_value' => $fieldValue
+        ];
+    }
+
+    /**
      * Data provider
      *
      * @return array testing data
@@ -59,8 +70,10 @@ class CustomFieldsModelUnitTest extends \PHPUnit\Framework\TestCase
     /**
      * Testing getFieldForObject
      *
-     * @param array $data custom fields of the object
-     * @param string $expectedResult expected result of the call getFieldForObject
+     * @param array $data
+     *            custom fields of the object
+     * @param string $expectedResult
+     *            expected result of the call getFieldForObject
      * @dataProvider getFieldForObjectDataProvider
      */
     public function testGetExistingCustomField(array $data, string $expectedResult): void
@@ -74,5 +87,21 @@ class CustomFieldsModelUnitTest extends \PHPUnit\Framework\TestCase
 
         // assertions
         $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    /**
+     * Testing method customFieldExists
+     */
+    public function testCustomFieldExists(): void
+    {
+        // setup
+        $model = new \CustomFieldsModelMock('entity');
+        $model->selectResult = [
+            $this->customField('existing-field', 1)
+        ];
+
+        // test body and assertions
+        $this->assertTrue($model->customFieldExists(1, 'existing-field'));
+        $this->assertFalse($model->customFieldExists(1, 'unexisting-field'));
     }
 }

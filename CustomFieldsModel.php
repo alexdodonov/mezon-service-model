@@ -62,10 +62,11 @@ class CustomFieldsModel
     {
         $result = [];
 
+        $objectId = intval($objectId);
         $customFields = $this->getConnection()->select(
             '*',
             $this->getCustomFieldsTemplateBame(),
-            'object_id = ' . $objectId);
+            "object_id = $objectId");
 
         foreach ($customFields as $field) {
             $fieldName = \Mezon\Functional\Fetcher::getField($field, 'field_name');
@@ -178,5 +179,21 @@ class CustomFieldsModel
         }
 
         return \Mezon\Functional\Fetcher::getField($customField[0], 'field_value');
+    }
+
+    /**
+     * Checking if the custom field exists
+     *
+     * @param int $objectId
+     *            object's id
+     * @param string $fieldName
+     *            field name
+     * @return bool true if the field exists, false otherwise
+     */
+    public function customFieldExists(int $objectId, string $fieldName): bool
+    {
+        $fields = $this->getCustomFieldsForObject($objectId);
+
+        return isset($fields[$fieldName]);
     }
 }
