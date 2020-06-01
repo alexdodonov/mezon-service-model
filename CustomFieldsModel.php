@@ -23,6 +23,7 @@ class CustomFieldsModel
 
     /**
      * Table name
+     * TODO make private
      */
     protected $tableName = '';
 
@@ -101,6 +102,32 @@ class CustomFieldsModel
     }
 
     /**
+     * Method updates custom field without any validations
+     *
+     * @param int $objectId
+     *            Object id
+     * @param string $fieldName
+     *            Field name
+     * @param string $fieldValue
+     *            Field value
+     */
+    public function updateCustomFieldWithoutValidations(int $objectId, string $fieldName, string $fieldValue): void
+    {
+        $objectId = intval($objectId);
+        $fieldName = htmlspecialchars($fieldName);
+        $fieldValue = htmlspecialchars($fieldValue);
+
+        $record = [
+            'field_value' => $fieldValue
+        ];
+
+        $this->getConnection()->update(
+            $this->getCustomFieldsTemplateBame(),
+            $record,
+            'field_name LIKE "' . $fieldName . '" AND object_id = ' . $objectId);
+    }
+
+    /**
      * Method sets custom field
      *
      * @param int $objectId
@@ -112,27 +139,22 @@ class CustomFieldsModel
      */
     public function setFieldForObject(int $objectId, string $fieldName, string $fieldValue): void
     {
-        $connection = $this->getConnection();
-
-        $objectId = intval($objectId);
-        $fieldName = htmlspecialchars($fieldName);
-        $fieldValue = htmlspecialchars($fieldValue);
-        $record = [
-            'field_value' => $fieldValue
-        ];
-
         if (count($this->getCustomFieldsForObject($objectId, [
             $fieldName
         ])) > 0) {
-            $connection->update(
-                $this->getCustomFieldsTemplateBame(),
-                $record,
-                'field_name LIKE "' . $fieldName . '" AND object_id = ' . $objectId);
+            $this->updateCustomFieldWithoutValidations($objectId, $fieldName, $fieldValue);
         } else {
+            $objectId = intval($objectId);
+            $fieldName = htmlspecialchars($fieldName);
+            $fieldValue = htmlspecialchars($fieldValue);
+            $record = [
+                'field_value' => $fieldValue
+            ];
+
             // in the previous line we have tried to update unexisting field, so create it
             $record['field_name'] = $fieldName;
             $record['object_id'] = $objectId;
-            $connection->insert($this->getCustomFieldsTemplateBame(), $record);
+            $this->getConnection()->insert($this->getCustomFieldsTemplateBame(), $record);
         }
     }
 

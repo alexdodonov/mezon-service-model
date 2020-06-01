@@ -51,7 +51,7 @@ class CustomFieldsModelUnitTest extends \PHPUnit\Framework\TestCase
     {
         // setup
         $model = new CustomFieldsModelMock('entity');
-        $model->selectResult = $data;
+        $model->getConnection()->selectResult = $data;
 
         // test body
         $actualResult = $model->getFieldForObject(1, 'id', 'default');
@@ -67,12 +67,28 @@ class CustomFieldsModelUnitTest extends \PHPUnit\Framework\TestCase
     {
         // setup
         $model = new CustomFieldsModelMock('entity');
-        $model->selectResult = [
+        $model->getConnection()->selectResult = [
             $this->customField('existing-field', 1)
         ];
 
         // test body and assertions
         $this->assertTrue($model->customFieldExists(1, 'existing-field'));
         $this->assertFalse($model->customFieldExists(1, 'unexisting-field'));
+    }
+
+    /**
+     * Testing method updateCustomFieldWithoutValidations
+     */
+    public function testUpdateCustomFieldWithoutValidations(): void
+    {
+        // setup
+        $model = new CustomFieldsModelMock('entity');
+        $model->getConnection()->updateWasCalledCounter = 0;
+
+        // test body
+        $model->updateCustomFieldWithoutValidations(1, 'updating-field', 'new-value');
+
+        // assertions
+        $this->assertEquals(1, $model->getConnection()->updateWasCalledCounter);
     }
 }
