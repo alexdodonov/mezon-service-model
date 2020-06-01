@@ -201,7 +201,7 @@ class CustomFieldsModel
             return $defaultValue;
         }
 
-        return \Mezon\Functional\Fetcher::getField($customField[0], 'field_value');
+        return $customField[0]['field_value'];
     }
 
     /**

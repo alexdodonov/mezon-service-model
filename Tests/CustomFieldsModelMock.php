@@ -59,14 +59,14 @@ class CustomFieldsModelMock extends \Mezon\Service\CustomFieldsModel
         $this->value = $value;
     }
 
-    private $connection = null;
+    private $connection = [];
 
-    public function getConnection()
+    public function getConnection(string $connectionName = 'default')
     {
-        if ($this->connection === null) {
-            $this->connection = new PdoCrudMock();
+        if (isset($this->connection[$connectionName]) === false) {
+            $this->connection[$connectionName] = new PdoCrudMock();
         }
 
-        return $this->connection;
+        return $this->connection[$connectionName];
     }
 }
