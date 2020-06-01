@@ -156,16 +156,16 @@
         },
         {
             "name": "mezon/functional",
-            "version": "1.0.5",
+            "version": "1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alexdodonov/mezon-functional.git",
-                "reference": "88e86242e300cd99de5a32e4f601125c1a414e20"
+                "reference": "858cafc76bbb40df7cc2fff4b41ba86b49d87004"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alexdodonov/mezon-functional/zipball/88e86242e300cd99de5a32e4f601125c1a414e20",
-                "reference": "88e86242e300cd99de5a32e4f601125c1a414e20",
+                "url": "https://api.github.com/repos/alexdodonov/mezon-functional/zipball/858cafc76bbb40df7cc2fff4b41ba86b49d87004",
+                "reference": "858cafc76bbb40df7cc2fff4b41ba86b49d87004",
                 "shasum": ""
             },
             "require": {
@@ -191,7 +191,7 @@
             ],
             "description": "Small and fast framework for functional programming",
             "homepage": "https://github.com/alexdodonov/mezon-functional",
-            "time": "2020-04-29T16:32:47+00:00"
+            "time": "2020-06-01T09:16:09+00:00"
         },
         {
             "name": "mezon/pdocrud",
