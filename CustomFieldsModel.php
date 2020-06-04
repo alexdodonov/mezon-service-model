@@ -91,7 +91,7 @@ class CustomFieldsModel
     public function deleteCustomFieldsForObject(int $objectId, array $filter = [])
     {
         if (count($filter)) {
-            $condition = 'field_name IN (`' . implode('`, `', $filter) . '`) AND ' . 'object_id = ' . intval($objectId);
+            $condition = 'field_name IN ("' . implode('", "', $filter) . '") AND ' . 'object_id = ' . intval($objectId);
 
             $this->getConnection()->delete($this->getCustomFieldsTemplateBame(), $condition);
         }
