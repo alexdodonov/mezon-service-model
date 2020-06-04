@@ -156,16 +156,16 @@
         },
         {
             "name": "mezon/functional",
-            "version": "1.0.6",
+            "version": "1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alexdodonov/mezon-functional.git",
-                "reference": "858cafc76bbb40df7cc2fff4b41ba86b49d87004"
+                "reference": "189502548c6b8c68507210f0f44460df6c682b0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alexdodonov/mezon-functional/zipball/858cafc76bbb40df7cc2fff4b41ba86b49d87004",
-                "reference": "858cafc76bbb40df7cc2fff4b41ba86b49d87004",
+                "url": "https://api.github.com/repos/alexdodonov/mezon-functional/zipball/189502548c6b8c68507210f0f44460df6c682b0e",
+                "reference": "189502548c6b8c68507210f0f44460df6c682b0e",
                 "shasum": ""
             },
             "require": {
@@ -191,20 +191,20 @@
             ],
             "description": "Small and fast framework for functional programming",
             "homepage": "https://github.com/alexdodonov/mezon-functional",
-            "time": "2020-06-01T09:16:09+00:00"
+            "time": "2020-06-01T09:24:54+00:00"
         },
         {
             "name": "mezon/pdocrud",
-            "version": "1.0.5",
+            "version": "1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alexdodonov/mezon-pdocrud.git",
-                "reference": "083d88f6ac6d6378b6ca24c9ad2591bc5178f15b"
+                "reference": "f4f0f180ec6719767b9f581a6e168afd228fe5c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alexdodonov/mezon-pdocrud/zipball/083d88f6ac6d6378b6ca24c9ad2591bc5178f15b",
-                "reference": "083d88f6ac6d6378b6ca24c9ad2591bc5178f15b",
+                "url": "https://api.github.com/repos/alexdodonov/mezon-pdocrud/zipball/f4f0f180ec6719767b9f581a6e168afd228fe5c8",
+                "reference": "f4f0f180ec6719767b9f581a6e168afd228fe5c8",
                 "shasum": ""
             },
             "require": {
@@ -231,7 +231,7 @@
             ],
             "description": "Simple PDO wrapper",
             "homepage": "https://github.com/alexdodonov/mezon-pdocrud",
-            "time": "2020-05-21T11:25:44+00:00"
+            "time": "2020-06-03T09:59:25+00:00"
         },
         {
             "name": "myclabs/deep-copy",

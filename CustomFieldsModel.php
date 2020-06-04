@@ -23,9 +23,8 @@ class CustomFieldsModel
 
     /**
      * Table name
-     * TODO make private
      */
-    protected $tableName = '';
+    private $tableName = '';
 
     /**
      * Constructor
@@ -87,18 +86,15 @@ class CustomFieldsModel
      * @param int $objectId
      *            Object id
      * @param array $filter
-     *            List of required fields or all
+     *            List of required fields
      */
-    public function deleteCustomFieldsForObject(int $objectId, array $filter = [
-        '1=1'
-    ])
+    public function deleteCustomFieldsForObject(int $objectId, array $filter = [])
     {
-        // TODO make filter be a list of fields to be deleted
-        $condition = implode(' AND ', array_merge($filter, [
-            'object_id = ' . $objectId
-        ]));
+        if (count($filter)) {
+            $condition = 'field_name IN (`' . implode('`, `', $filter) . '`) AND ' . 'object_id = ' . intval($objectId);
 
-        $this->getConnection()->delete($this->getCustomFieldsTemplateBame(), $condition);
+            $this->getConnection()->delete($this->getCustomFieldsTemplateBame(), $condition);
+        }
     }
 
     /**

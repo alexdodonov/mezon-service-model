@@ -50,7 +50,7 @@ class CustomFieldsModelUnitTest extends \PHPUnit\Framework\TestCase
     public function testGetExistingCustomField(array $data, string $expectedResult): void
     {
         // setup
-        $model = new CustomFieldsModelMock('entity');
+        $model = new CustomFieldsModelMock('existing-entity');
         $model->getConnection()->selectResult = $data;
 
         // test body
@@ -90,5 +90,21 @@ class CustomFieldsModelUnitTest extends \PHPUnit\Framework\TestCase
 
         // assertions
         $this->assertEquals(1, $model->getConnection()->updateWasCalledCounter);
+    }
+
+    /**
+     * Testing method deleteCustomFieldsForObject
+     */
+    public function testDeleteCustomFieldsForObject(): void
+    {
+        // setup
+        $model = new CustomFieldsModelMock('delete-entity');
+        $model->getConnection()->deleteWasCalledCounter = 0;
+
+        // test body
+        $model->deleteCustomFieldsForObject(1, ['deleting-field']);
+
+        // assertions
+        $this->assertEquals(1, $model->getConnection()->deleteWasCalledCounter);
     }
 }
