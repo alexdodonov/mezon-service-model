@@ -192,7 +192,7 @@ class CustomFieldsModel
             $this->getCustomFieldsTemplateBame(),
             'object_id = ' . $objectId . ' AND field_name LIKE "' . htmlspecialchars($fieldName) . '"');
 
-        if (count($customField) === 0) {
+        if (empty($customField)) {
             // field was not found
             return $defaultValue;
         }
