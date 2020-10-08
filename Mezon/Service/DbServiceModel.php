@@ -1,6 +1,9 @@
 <?php
 namespace Mezon\Service;
 
+use Mezon\PdoCrud\ConnectionTrait;
+use Mezon\FieldsSet;
+
 /**
  * Class DbServiceModel
  *
@@ -19,7 +22,7 @@ namespace Mezon\Service;
 class DbServiceModel extends \Mezon\Service\ServiceModel
 {
 
-    use \Mezon\PdoCrud\ConnectionTrait;
+    use ConnectionTrait;
 
     /**
      * Table name
@@ -53,7 +56,7 @@ class DbServiceModel extends \Mezon\Service\ServiceModel
         $this->entityName = $entityName;
 
         if (is_string($fields)) {
-            $this->fieldsSet = new \Mezon\FieldsSet(
+            $this->fieldsSet = new FieldsSet(
                 [
                     '*' => [
                         'type' => 'string',
@@ -61,8 +64,8 @@ class DbServiceModel extends \Mezon\Service\ServiceModel
                     ]
                 ]);
         } elseif (is_array($fields)) {
-            $this->fieldsSet = new \Mezon\FieldsSet($fields);
-        } elseif ($fields instanceof \Mezon\FieldsSet) {
+            $this->fieldsSet = new FieldsSet($fields);
+        } elseif ($fields instanceof FieldsSet) {
             $this->fieldsSet = $fields;
         } else {
             throw (new \Exception('Invalid fields description', - 1));

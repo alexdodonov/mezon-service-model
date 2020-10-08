@@ -1,6 +1,9 @@
 <?php
 namespace Mezon\Service;
 
+use Mezon\PdoCrud\ConnectionTrait;
+use Mezon\Functional\Fetcher;
+
 /**
  * Class CustomFieldsModel
  *
@@ -19,7 +22,7 @@ namespace Mezon\Service;
 class CustomFieldsModel
 {
 
-    use \Mezon\PdoCrud\ConnectionTrait;
+    use ConnectionTrait;
 
     /**
      * Table name
@@ -42,7 +45,7 @@ class CustomFieldsModel
      *
      * @return string Table name
      */
-    protected function getCustomFieldsTemplateBame(): string
+    protected function getCustomFieldsTemplateName(): string
     {
         return $this->tableName . '_custom_field';
     }
@@ -65,15 +68,15 @@ class CustomFieldsModel
         $objectId = intval($objectId);
         $customFields = $this->getConnection()->select(
             '*',
-            $this->getCustomFieldsTemplateBame(),
+            $this->getCustomFieldsTemplateName(),
             "object_id = $objectId");
 
         foreach ($customFields as $field) {
-            $fieldName = \Mezon\Functional\Fetcher::getField($field, 'field_name');
+            $fieldName = Fetcher::getField($field, 'field_name');
 
             // if the field in the list or all fields must be fetched
             if (in_array($fieldName, $filter) || in_array('*', $filter)) {
-                $result[$fieldName] = \Mezon\Functional\Fetcher::getField($field, 'field_value');
+                $result[$fieldName] = Fetcher::getField($field, 'field_value');
             }
         }
 
@@ -93,7 +96,7 @@ class CustomFieldsModel
         if (count($filter)) {
             $condition = 'field_name IN ("' . implode('", "', $filter) . '") AND ' . 'object_id = ' . intval($objectId);
 
-            $this->getConnection()->delete($this->getCustomFieldsTemplateBame(), $condition);
+            $this->getConnection()->delete($this->getCustomFieldsTemplateName(), $condition);
         }
     }
 
@@ -118,7 +121,7 @@ class CustomFieldsModel
         ];
 
         $this->getConnection()->update(
-            $this->getCustomFieldsTemplateBame(),
+            $this->getCustomFieldsTemplateName(),
             $record,
             'field_name LIKE "' . $fieldName . '" AND object_id = ' . $objectId);
     }
@@ -150,7 +153,7 @@ class CustomFieldsModel
             // in the previous line we have tried to update unexisting field, so create it
             $record['field_name'] = $fieldName;
             $record['object_id'] = $objectId;
-            $this->getConnection()->insert($this->getCustomFieldsTemplateBame(), $record);
+            $this->getConnection()->insert($this->getCustomFieldsTemplateName(), $record);
         }
     }
 
@@ -164,7 +167,7 @@ class CustomFieldsModel
     public function getCustomFieldsForRecords(array $records): array
     {
         foreach ($records as $i => $record) {
-            $id = \Mezon\Functional\Fetcher::getField($record, 'id');
+            $id = Fetcher::getField($record, 'id');
 
             if ($id === null) {
                 throw (new \Exception('Field "id" was not found in record', - 1));
@@ -189,7 +192,7 @@ class CustomFieldsModel
     {
         $customField = $this->getConnection()->select(
             '*',
-            $this->getCustomFieldsTemplateBame(),
+            $this->getCustomFieldsTemplateName(),
             'object_id = ' . $objectId . ' AND field_name LIKE "' . htmlspecialchars($fieldName) . '"');
 
         if (empty($customField)) {

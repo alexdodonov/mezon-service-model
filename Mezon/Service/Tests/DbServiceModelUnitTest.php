@@ -1,6 +1,11 @@
 <?php
+namespace Mezon\Service\Tests;
 
-class DbServiceModelUnitTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Mezon\FieldsSet;
+use Mezon\Service\DbServiceModel;
+
+class DbServiceModelUnitTest extends TestCase
 {
 
     /**
@@ -34,7 +39,7 @@ class DbServiceModelUnitTest extends \PHPUnit\Framework\TestCase
                 '*',
             ],
             [
-                new \Mezon\FieldsSet($this->getFieldSet()),
+                new FieldsSet($this->getFieldSet()),
                 'id',
             ],
         ];
@@ -52,7 +57,7 @@ class DbServiceModelUnitTest extends \PHPUnit\Framework\TestCase
     public function testConstructor($data, string $origin)
     {
         // setup and test body
-        $model = new \Mezon\Service\DbServiceModel($data, 'entity_name_constructor');
+        $model = new DbServiceModel($data, 'entity_name_constructor');
 
         // assertions
         $this->assertTrue($model->hasField($origin), 'Invalid contruction');
@@ -66,8 +71,8 @@ class DbServiceModelUnitTest extends \PHPUnit\Framework\TestCase
     public function testConstructorException()
     {
         // setup and test body
-        $this->expectException(Exception::class);
-        new \Mezon\Service\DbServiceModel(new stdClass(), 'entity_name');
+        $this->expectException(\Exception::class);
+        new DbServiceModel(new \stdClass(), 'entity_name');
     }
 
     /**
@@ -76,7 +81,7 @@ class DbServiceModelUnitTest extends \PHPUnit\Framework\TestCase
     public function testGetFieldsNames(): void
     {
         // setup and test body
-        $model = new \Mezon\Service\DbServiceModel($this->getFieldSet(), 'entity_name');
+        $model = new DbServiceModel($this->getFieldSet(), 'entity_name');
 
         // assertions
         $this->assertEquals('id', implode('', $model->getFields()));
@@ -88,7 +93,7 @@ class DbServiceModelUnitTest extends \PHPUnit\Framework\TestCase
     public function testSetTableName(): void
     {
         // setup and test body
-        $model = new \Mezon\Service\DbServiceModel($this->getFieldSet(), 'entity-name');
+        $model = new DbServiceModel($this->getFieldSet(), 'entity-name');
 
         // assertions
         $this->assertEquals('`entity-name`', $model->getTableName());
@@ -100,7 +105,7 @@ class DbServiceModelUnitTest extends \PHPUnit\Framework\TestCase
     public function testGetEntityName(): void
     {
         // setup
-        $model = new \Mezon\Service\DbServiceModel($this->getFieldSet(), 'table-name', 'table-entity-name');
+        $model = new DbServiceModel($this->getFieldSet(), 'table-name', 'table-entity-name');
 
         // test body and assertions
         $this->assertEquals('table-entity-name', $model->getEntityName());
@@ -112,7 +117,7 @@ class DbServiceModelUnitTest extends \PHPUnit\Framework\TestCase
     public function testGetFieldType(): void
     {
         // setup
-        $model = new \Mezon\Service\DbServiceModel($this->getFieldSet(), 'table-name');
+        $model = new DbServiceModel($this->getFieldSet(), 'table-name');
 
         // test body and assertions
         $this->assertEquals('integer', $model->getFieldType('id'));
@@ -124,7 +129,7 @@ class DbServiceModelUnitTest extends \PHPUnit\Framework\TestCase
     public function testValidateFieldExistence(): void
     {
         // setup and assertions
-        $model = new \Mezon\Service\DbServiceModel($this->getFieldSet(), 'table-name');
+        $model = new DbServiceModel($this->getFieldSet(), 'table-name');
         $this->expectException(\Exception::class);
 
         // test body

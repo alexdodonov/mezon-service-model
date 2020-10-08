@@ -1,7 +1,9 @@
 <?php
 namespace Mezon\Service\Tests;
 
-class CustomFieldsModelUnitTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class CustomFieldsModelUnitTest extends TestCase
 {
 
     /**
@@ -102,9 +104,63 @@ class CustomFieldsModelUnitTest extends \PHPUnit\Framework\TestCase
         $model->getConnection()->deleteWasCalledCounter = 0;
 
         // test body
-        $model->deleteCustomFieldsForObject(1, ['deleting-field']);
+        $model->deleteCustomFieldsForObject(1, [
+            'deleting-field'
+        ]);
 
         // assertions
         $this->assertEquals(1, $model->getConnection()->deleteWasCalledCounter);
+    }
+
+    /**
+     * Testing getCustomFieldsForRecords method
+     */
+    public function testGetCustomFieldsForRecords(): void
+    {
+        // setup
+        $model = new CustomFieldsModelMock('get-entity');
+        $model->getConnection()->selectResult = [
+            [
+                'field_name' => 'field',
+                'field_value' => true
+            ]
+        ];
+        $records = [
+            [
+                'id' => 1
+            ],
+            [
+                'id' => 2
+            ]
+        ];
+
+        // test body
+        $result = $model->getCustomFieldsForRecords($records);
+
+        // assertions
+        $this->assertArrayHasKey('custom', $result[0]);
+        $this->assertArrayHasKey('custom', $result[1]);
+        $this->assertArrayHasKey('field', $result[0]['custom']);
+        $this->assertArrayHasKey('field', $result[1]['custom']);
+        $this->assertTrue($result[0]['custom']['field']);
+        $this->assertTrue($result[1]['custom']['field']);
+    }
+
+    /**
+     * Testing getCustomFieldsForRecords method with invaid data
+     */
+    public function testGetCustomFieldsForRecordsInvalid(): void
+    {
+        // setup
+        $model = new CustomFieldsModelMock('get-entity');
+        $records = [
+            []
+        ];
+
+        // assertions
+        $this->expectException(\Exception::class);
+
+        // test body
+        $model->getCustomFieldsForRecords($records);
     }
 }

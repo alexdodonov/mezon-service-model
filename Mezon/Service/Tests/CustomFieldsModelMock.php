@@ -2,8 +2,9 @@
 namespace Mezon\Service\Tests;
 
 use Mezon\PdoCrud\Tests\PdoCrudMock;
+use Mezon\Service\CustomFieldsModel;
 
-class CustomFieldsModelMock extends \Mezon\Service\CustomFieldsModel
+class CustomFieldsModelMock extends CustomFieldsModel
 {
 
     var $id = false;
