@@ -66,6 +66,7 @@ class CustomFieldsModel
         $result = [];
 
         $objectId = intval($objectId);
+        // TODO use executeSelect
         $customFields = $this->getConnection()->select(
             '*',
             $this->getCustomFieldsTemplateName(),
@@ -190,6 +191,7 @@ class CustomFieldsModel
      */
     public function getFieldForObject(int $objectId, string $fieldName, string $defaultValue): string
     {
+        // TODO use executeSelect
         $customField = $this->getConnection()->select(
             '*',
             $this->getCustomFieldsTemplateName(),
