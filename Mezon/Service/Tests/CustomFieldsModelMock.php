@@ -22,7 +22,7 @@ class CustomFieldsModelMock extends CustomFieldsModel
 
     private $connection = [];
 
-    public function getConnection(string $connectionName = 'default')
+    public function getConnection($connectionName = 'default')
     {
         if (isset($this->connection[$connectionName]) === false) {
             $this->connection[$connectionName] = new PdoCrudMock();
