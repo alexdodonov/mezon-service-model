@@ -3,6 +3,7 @@ namespace Mezon\Service;
 
 use Mezon\PdoCrud\ConnectionTrait;
 use Mezon\Functional\Fetcher;
+use Mezon\PdoCrud\ApropriateConnectionTrait;
 
 /**
  * Class CustomFieldsModel
@@ -22,7 +23,7 @@ use Mezon\Functional\Fetcher;
 class CustomFieldsModel
 {
 
-    use ConnectionTrait;
+    use ApropriateConnectionTrait;
 
     /**
      * Table name
@@ -65,12 +66,10 @@ class CustomFieldsModel
     {
         $result = [];
 
-        $objectId = intval($objectId);
-        // TODO use executeSelect
-        $customFields = $this->getConnection()->select(
-            '*',
-            $this->getCustomFieldsTemplateName(),
-            "object_id = $objectId");
+        $this->getApropriateConnection()->prepare(
+            'SELECT * FROM ' . $this->getCustomFieldsTemplateName() . ' WHERE object_id = :object_id');
+        $this->getApropriateConnection()->bindParameter(':object_id', $objectId);
+        $customFields = $this->getApropriateConnection()->executeSelect();
 
         foreach ($customFields as $field) {
             $fieldName = Fetcher::getField($field, 'field_name');
@@ -97,7 +96,8 @@ class CustomFieldsModel
         if (count($filter)) {
             $condition = 'field_name IN ("' . implode('", "', $filter) . '") AND ' . 'object_id = ' . intval($objectId);
 
-            $this->getConnection()->delete($this->getCustomFieldsTemplateName(), $condition);
+            // TODO replace with execute
+            $this->getApropriateConnection()->delete($this->getCustomFieldsTemplateName(), $condition);
         }
     }
 
@@ -121,7 +121,8 @@ class CustomFieldsModel
             'field_value' => $fieldValue
         ];
 
-        $this->getConnection()->update(
+        // TODO replace with execute
+        $this->getApropriateConnection()->update(
             $this->getCustomFieldsTemplateName(),
             $record,
             'field_name LIKE "' . $fieldName . '" AND object_id = ' . $objectId);
@@ -154,7 +155,8 @@ class CustomFieldsModel
             // in the previous line we have tried to update unexisting field, so create it
             $record['field_name'] = $fieldName;
             $record['object_id'] = $objectId;
-            $this->getConnection()->insert($this->getCustomFieldsTemplateName(), $record);
+            // TODO replace with execute
+            $this->getApropriateConnection()->insert($this->getCustomFieldsTemplateName(), $record);
         }
     }
 
@@ -191,11 +193,13 @@ class CustomFieldsModel
      */
     public function getFieldForObject(int $objectId, string $fieldName, string $defaultValue): string
     {
-        // TODO use executeSelect
-        $customField = $this->getConnection()->select(
-            '*',
-            $this->getCustomFieldsTemplateName(),
-            'object_id = ' . $objectId . ' AND field_name LIKE "' . htmlspecialchars($fieldName) . '"');
+        $this->getApropriateConnection()->prepare(
+            'SELECT * FROM ' . $this->getCustomFieldsTemplateName() .
+            ' WHERE object_id = :object_id AND field_name LIKE :field_name');
+        $this->getApropriateConnection()->bindParameter(':object_id', $objectId);
+        $this->getApropriateConnection()->bindParameter(':field_name', $fieldName, \PDO::PARAM_STR);
+
+        $customField = $this->getApropriateConnection()->executeSelect();
 
         if (empty($customField)) {
             // field was not found

@@ -3,6 +3,7 @@ namespace Mezon\Service;
 
 use Mezon\PdoCrud\ConnectionTrait;
 use Mezon\FieldsSet;
+use Mezon\PdoCrud\ApropriateConnectionTrait;
 
 /**
  * Class DbServiceModel
@@ -19,10 +20,10 @@ use Mezon\FieldsSet;
  *
  * @author Dodonov A.A.
  */
-class DbServiceModel extends \Mezon\Service\ServiceModel
+class DbServiceModel extends ServiceModel
 {
 
-    use ConnectionTrait;
+    use ApropriateConnectionTrait;
 
     /**
      * Table name

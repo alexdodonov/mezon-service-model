@@ -2,6 +2,8 @@
 namespace Mezon\Service\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Mezon\Service\CustomFieldsModel;
+use Mezon\PdoCrud\Tests\PdoCrudMock;
 
 class CustomFieldsModelUnitTest extends TestCase
 {
@@ -52,8 +54,9 @@ class CustomFieldsModelUnitTest extends TestCase
     public function testGetExistingCustomField(array $data, string $expectedResult): void
     {
         // setup
-        $model = new CustomFieldsModelMock('existing-entity');
-        $model->getConnection()->selectResult = $data;
+        $model = new CustomFieldsModel('existing-entity');
+        $model->setConnection(new PdoCrudMock());
+        $model->getConnection()->selectResults[] = $data;
 
         // test body
         $actualResult = $model->getFieldForObject(1, 'id', 'default');
@@ -68,8 +71,12 @@ class CustomFieldsModelUnitTest extends TestCase
     public function testCustomFieldExists(): void
     {
         // setup
-        $model = new CustomFieldsModelMock('entity');
-        $model->getConnection()->selectResult = [
+        $model = new CustomFieldsModel('entity');
+        $model->setConnection(new PdoCrudMock());
+        $model->getConnection()->selectResults[] = [
+            $this->customField('existing-field', 1)
+        ];
+        $model->getConnection()->selectResults[] = [
             $this->customField('existing-field', 1)
         ];
 
@@ -84,7 +91,8 @@ class CustomFieldsModelUnitTest extends TestCase
     public function testUpdateCustomFieldWithoutValidations(): void
     {
         // setup
-        $model = new CustomFieldsModelMock('entity');
+        $model = new CustomFieldsModel('entity');
+        $model->setConnection(new PdoCrudMock());
         $model->getConnection()->updateWasCalledCounter = 0;
 
         // test body
@@ -100,7 +108,8 @@ class CustomFieldsModelUnitTest extends TestCase
     public function testDeleteCustomFieldsForObject(): void
     {
         // setup
-        $model = new CustomFieldsModelMock('delete-entity');
+        $model = new CustomFieldsModel('delete-entity');
+        $model->setConnection(new PdoCrudMock());
         $model->getConnection()->deleteWasCalledCounter = 0;
 
         // test body
@@ -118,8 +127,15 @@ class CustomFieldsModelUnitTest extends TestCase
     public function testGetCustomFieldsForRecords(): void
     {
         // setup
-        $model = new CustomFieldsModelMock('get-entity');
-        $model->getConnection()->selectResult = [
+        $model = new CustomFieldsModel('get-entity');
+        $model->setConnection(new PdoCrudMock());
+        $model->getConnection()->selectResults[] = [
+            [
+                'field_name' => 'field',
+                'field_value' => true
+            ]
+        ];
+        $model->getConnection()->selectResults[] = [
             [
                 'field_name' => 'field',
                 'field_value' => true
@@ -152,7 +168,7 @@ class CustomFieldsModelUnitTest extends TestCase
     public function testGetCustomFieldsForRecordsInvalid(): void
     {
         // setup
-        $model = new CustomFieldsModelMock('get-entity');
+        $model = new CustomFieldsModel('get-entity');
         $records = [
             []
         ];
@@ -162,5 +178,71 @@ class CustomFieldsModelUnitTest extends TestCase
 
         // test body
         $model->getCustomFieldsForRecords($records);
+    }
+
+    /**
+     * Testing data provider
+     *
+     * @return array testing data
+     */
+    public function setFieldForObjectDataProvider(): array
+    {
+        return [
+            // #0, the first case - field does not exist
+            [
+                function (): object {
+                    // setup method
+                    $connection = new PdoCrudMock();
+                    $connection->selectResults[] = [];
+
+                    return $connection;
+                },
+                function (PdoCrudMock $connection): void {
+                    // asserting method
+                    $this->assertEquals(1, $connection->insertWasCalledCounter);
+                }
+            ],
+            // #1, the first case - field exists
+            [
+                function (): object {
+                    // setup method
+                    $connection = new PdoCrudMock();
+                    $connection->selectResults[] = [
+                        [
+                            'field_name' => 'setting-field',
+                            'field_value' => 1
+                        ]
+                    ];
+
+                    return $connection;
+                },
+                function (PdoCrudMock $connection): void {
+                    // asserting method
+                    $this->assertEquals(1, $connection->updateWasCalledCounter);
+                }
+            ]
+        ];
+    }
+
+    /**
+     * Testing method setFieldForObject
+     *
+     * @param callable $setup
+     *            setup method
+     * @param callable $assertions
+     *            assertion method
+     * @dataProvider setFieldForObjectDataProvider
+     */
+    public function testSetFieldForObject(callable $setup, callable $assertions): void
+    {
+        // setup
+        $model = new CustomFieldsModel('get-entity');
+        $model->setConnection($connection = $setup());
+
+        // test body
+        $model->setFieldForObject(1, 'setting-field', 'some-field-value');
+
+        // assertions
+        $assertions($connection);
     }
 }

@@ -4,6 +4,7 @@ namespace Mezon\Service\Tests;
 use PHPUnit\Framework\TestCase;
 use Mezon\FieldsSet;
 use Mezon\Service\DbServiceModel;
+use Mezon\PdoCrud\Tests\PdoCrudMock;
 
 class DbServiceModelUnitTest extends TestCase
 {
@@ -70,9 +71,11 @@ class DbServiceModelUnitTest extends TestCase
      */
     public function testConstructorException()
     {
-        // setup and test body
+        // setup and assertions
         $this->expectException(\Exception::class);
-        new DbServiceModel(new \stdClass(), 'entity_name');
+
+        // test body
+        $model = new DbServiceModel(new \stdClass(), 'entity_name');
     }
 
     /**
@@ -134,5 +137,27 @@ class DbServiceModelUnitTest extends TestCase
 
         // test body
         $model->validateFieldExistance('title');
+    }
+
+    /**
+     * Testing method
+     */
+    public function testGetApropriateConnection(): void
+    {
+        // setup
+        $model = new DbServiceModel($this->getFieldSet(), 'entity_name');
+        $model->setConnection(new PdoCrudMock());
+
+        // test body 1
+        $connection = $model->getConnection();
+
+        // assertions 1
+        $this->assertInstanceOf(PdoCrudMock::class, $connection);
+
+        // test body 2
+        $connection = $model->getApropriateConnection();
+
+        // assertions 2
+        $this->assertInstanceOf(PdoCrudMock::class, $connection);
     }
 }
