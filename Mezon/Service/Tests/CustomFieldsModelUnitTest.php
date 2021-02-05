@@ -118,7 +118,7 @@ class CustomFieldsModelUnitTest extends TestCase
         ]);
 
         // assertions
-        $this->assertEquals(1, $model->getConnection()->deleteWasCalledCounter);
+        $this->assertEquals(1, $model->getConnection()->executeWasCalledCounter);
     }
 
     /**

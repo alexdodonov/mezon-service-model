@@ -93,11 +93,13 @@ class CustomFieldsModel
      */
     public function deleteCustomFieldsForObject(int $objectId, array $filter = []): void
     {
-        if (count($filter)) {
-            $condition = 'field_name IN ("' . implode('", "', $filter) . '") AND ' . 'object_id = ' . intval($objectId);
+        if (! empty($filter)) {
+            $condition = 'field_name IN ("' . implode('", "', $filter) . '") AND ' . 'object_id = :object_id';
 
-            // TODO replace with execute
-            $this->getApropriateConnection()->delete($this->getCustomFieldsTemplateName(), $condition);
+            $this->getApropriateConnection()->prepare(
+                'DELETE FROM ' . $this->getCustomFieldsTemplateName() . ' WHERE ' . $condition);
+            $this->getApropriateConnection()->bindParameter(':object_id', $objectId, \PDO::PARAM_INT);
+            $this->getApropriateConnection()->execute();
         }
     }
 
