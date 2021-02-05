@@ -115,19 +115,15 @@ class CustomFieldsModel
      */
     public function updateCustomFieldWithoutValidations(int $objectId, string $fieldName, string $fieldValue): void
     {
-        $objectId = intval($objectId);
-        $fieldName = htmlspecialchars($fieldName);
-        $fieldValue = htmlspecialchars($fieldValue);
+        $this->getApropriateConnection()->prepare(
+            'UPDATE ' . $this->getCustomFieldsTemplateName() .
+            ' SET field_value = :field_value WHERE field_name LIKE :field_name AND object_id = :object_id');
 
-        $record = [
-            'field_value' => $fieldValue
-        ];
+        $this->getApropriateConnection()->bindParameter(':field_value', $fieldValue, \PDO::PARAM_STR);
+        $this->getApropriateConnection()->bindParameter(':field_name', $fieldName, \PDO::PARAM_STR);
+        $this->getApropriateConnection()->bindParameter(':object_id', $objectId, \PDO::PARAM_INT);
 
-        // TODO replace with execute
-        $this->getApropriateConnection()->update(
-            $this->getCustomFieldsTemplateName(),
-            $record,
-            'field_name LIKE "' . $fieldName . '" AND object_id = ' . $objectId);
+        $this->getApropriateConnection()->execute();
     }
 
     /**
