@@ -64,8 +64,14 @@ class VariadicModel
             $this->setRealModel(new $this->localModel());
         } elseif ($modelSetting === 'remote') {
             $this->setRealModel(new $this->remoteModel());
-        } else {
+        } elseif (is_string($modelSetting) && class_exists($modelSetting)) {
             $this->setRealModel(new $modelSetting());
+        } elseif ($modelSetting instanceof ServiceModel) {
+            $this->setRealModel($modelSetting);
+        } else {
+            throw (new \Exception(
+                'Can not construct model from value ' .
+                (is_string($modelSetting) ? $modelSetting : serialize($modelSetting))));
         }
     }
 
@@ -82,7 +88,8 @@ class VariadicModel
     /**
      * Method sets real model
      *
-     * @param object $realModel real model
+     * @param object $realModel
+     *            real model
      */
     public function setRealModel(object $realModel): void
     {
