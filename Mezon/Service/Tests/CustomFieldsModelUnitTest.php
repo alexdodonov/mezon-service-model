@@ -93,13 +93,12 @@ class CustomFieldsModelUnitTest extends TestCase
         // setup
         $model = new CustomFieldsModel('entity');
         $model->setConnection(new PdoCrudMock());
-        $model->getConnection()->updateWasCalledCounter = 0;
 
         // test body
         $model->updateCustomFieldWithoutValidations(1, 'updating-field', 'new-value');
 
         // assertions
-        $this->assertEquals(1, $model->getConnection()->updateWasCalledCounter);
+        $this->assertEquals(1, $model->getConnection()->executeWasCalledCounter);
     }
 
     /**
@@ -218,7 +217,7 @@ class CustomFieldsModelUnitTest extends TestCase
                 },
                 function (PdoCrudMock $connection): void {
                     // asserting method
-                    $this->assertEquals(1, $connection->updateWasCalledCounter);
+                    $this->assertEquals(1, $connection->executeWasCalledCounter);
                 }
             ]
         ];
