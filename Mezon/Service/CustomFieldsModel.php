@@ -91,7 +91,7 @@ class CustomFieldsModel
      * @param array $filter
      *            List of required fields
      */
-    public function deleteCustomFieldsForObject(int $objectId, array $filter = []): void
+    public function deleteCustomFieldsForObject(int $objectId, array $filter = [])
     {
         if (! empty($filter)) {
             $condition = 'field_name IN ("' . implode('", "', $filter) . '") AND ' . 'object_id = :object_id';
@@ -118,7 +118,6 @@ class CustomFieldsModel
         $this->getApropriateConnection()->prepare(
             'UPDATE ' . $this->getCustomFieldsTemplateName() .
             ' SET field_value = :field_value WHERE field_name LIKE :field_name AND object_id = :object_id');
-
         $this->getApropriateConnection()->bindParameter(':field_value', $fieldValue, \PDO::PARAM_STR);
         $this->getApropriateConnection()->bindParameter(':field_name', $fieldName, \PDO::PARAM_STR);
         $this->getApropriateConnection()->bindParameter(':object_id', $objectId, \PDO::PARAM_INT);

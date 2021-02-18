@@ -90,4 +90,17 @@ class VariadicModelUnitTest extends TestCase
         // assertions
         $this->assertInstanceOf($expected, $model->getRealModel());
     }
+
+    /**
+     * Testing exception
+     */
+    public function testException(): void
+    {
+        // assertions
+        $this->expectException(\Exception::class);
+
+        // setup
+        Conf::setConfigValue('variadic-model-config-key', 'some model');
+        new TestingVariadicModel();
+    }
 }
