@@ -198,7 +198,7 @@ class CustomFieldsModelUnitTest extends TestCase
                 },
                 function (PdoCrudMock $connection): void {
                     // asserting method
-                    $this->assertEquals(1, $connection->insertWasCalledCounter);
+                    $this->assertEquals(1, $connection->executeWasCalledCounter);
                 }
             ],
             // #1, the first case - field exists

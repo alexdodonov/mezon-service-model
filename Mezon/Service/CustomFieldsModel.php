@@ -142,18 +142,13 @@ class CustomFieldsModel
         ])) > 0) {
             $this->updateCustomFieldWithoutValidations($objectId, $fieldName, $fieldValue);
         } else {
-            $objectId = intval($objectId);
-            $fieldName = htmlspecialchars($fieldName);
-            $fieldValue = htmlspecialchars($fieldValue);
-            $record = [
-                'field_value' => $fieldValue
-            ];
-
-            // in the previous line we have tried to update unexisting field, so create it
-            $record['field_name'] = $fieldName;
-            $record['object_id'] = $objectId;
-            // TODO replace with execute
-            $this->getApropriateConnection()->insert($this->getCustomFieldsTemplateName(), $record);
+            $this->getApropriateConnection()->prepare(
+                'INSERT INTO ' . $this->getCustomFieldsTemplateName() .
+                ' (field_value, field_name, object_id) VALUES (:field_value, :field_name, :object_id)');
+            $this->getApropriateConnection()->bindParameter(':field_value', $fieldValue, \PDO::PARAM_STR);
+            $this->getApropriateConnection()->bindParameter(':field_name', $fieldName, \PDO::PARAM_STR);
+            $this->getApropriateConnection()->bindParameter(':object_id', $objectId, \PDO::PARAM_INT);
+            $this->getApropriateConnection()->execute();
         }
     }
 
