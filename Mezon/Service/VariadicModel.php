@@ -19,6 +19,8 @@ use Mezon\Transport\RequestParams;
  */
 class VariadicModel
 {
+    
+    // TODO extract into separate package
 
     /**
      * Real model
@@ -66,7 +68,7 @@ class VariadicModel
             $this->setRealModel(new $this->remoteModel());
         } elseif (is_string($modelSetting) && class_exists($modelSetting)) {
             $this->setRealModel(new $modelSetting());
-        } elseif ($modelSetting instanceof ServiceModel) {
+        } elseif (is_object($modelSetting)) {
             $this->setRealModel($modelSetting);
         } else {
             throw (new \Exception(
