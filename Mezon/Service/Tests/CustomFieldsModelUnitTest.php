@@ -26,6 +26,9 @@ class CustomFieldsModelUnitTest extends TestCase
      */
     public function getFieldForObjectDataProvider(): array
     {
+        $obj = new \stdClass();
+        $obj->field_value = '111';
+
         return [
             [
                 [],
@@ -33,9 +36,7 @@ class CustomFieldsModelUnitTest extends TestCase
             ],
             [
                 [
-                    [
-                        'field_value' => '111'
-                    ]
+                    $obj
                 ],
                 '111'
             ]

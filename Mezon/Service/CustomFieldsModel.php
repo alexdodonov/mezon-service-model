@@ -198,7 +198,7 @@ class CustomFieldsModel
             return $defaultValue;
         }
 
-        return $customField[0]['field_value'];
+        return $customField[0]->field_value;
     }
 
     /**
