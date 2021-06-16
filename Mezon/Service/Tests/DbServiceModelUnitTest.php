@@ -6,6 +6,7 @@ use Mezon\FieldsSet;
 use Mezon\Service\DbServiceModel;
 use Mezon\PdoCrud\Tests\PdoCrudMock;
 
+/** @psalm-suppress PropertyNotSetInConstructor */
 class DbServiceModelUnitTest extends TestCase
 {
 
@@ -55,7 +56,7 @@ class DbServiceModelUnitTest extends TestCase
      *            original data for validation
      * @dataProvider constructorTestData
      */
-    public function testConstructor($data, string $origin)
+    public function testConstructor($data, string $origin): void
     {
         // setup and test body
         $model = new DbServiceModel($data, 'entity_name_constructor');
@@ -69,7 +70,7 @@ class DbServiceModelUnitTest extends TestCase
     /**
      * Testing constructor with exception
      */
-    public function testConstructorException()
+    public function testConstructorException(): void
     {
         // setup and assertions
         $this->expectException(\Exception::class);

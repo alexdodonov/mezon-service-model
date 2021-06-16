@@ -56,8 +56,8 @@ class CustomFieldsModelUnitTest extends TestCase
     {
         // setup
         $model = new CustomFieldsModel('existing-entity');
-        $model->setConnection(new PdoCrudMock());
-        $model->getConnection()->selectResults[] = $data;
+        $model->setConnection($connection = new PdoCrudMock());
+        $connection->selectResults[] = $data;
 
         // test body
         $actualResult = $model->getFieldForObject(1, 'id', 'default');
@@ -73,11 +73,11 @@ class CustomFieldsModelUnitTest extends TestCase
     {
         // setup
         $model = new CustomFieldsModel('entity');
-        $model->setConnection(new PdoCrudMock());
-        $model->getConnection()->selectResults[] = [
+        $model->setConnection($connection = new PdoCrudMock());
+        $connection->selectResults[] = [
             $this->customField('existing-field', 1)
         ];
-        $model->getConnection()->selectResults[] = [
+        $connection->selectResults[] = [
             $this->customField('existing-field', 1)
         ];
 
@@ -93,13 +93,13 @@ class CustomFieldsModelUnitTest extends TestCase
     {
         // setup
         $model = new CustomFieldsModel('entity');
-        $model->setConnection(new PdoCrudMock());
+        $model->setConnection($connection = new PdoCrudMock());
 
         // test body
         $model->updateCustomFieldWithoutValidations(1, 'updating-field', 'new-value');
 
         // assertions
-        $this->assertEquals(1, $model->getConnection()->executeWasCalledCounter);
+        $this->assertEquals(1, $connection->executeWasCalledCounter);
     }
 
     /**
@@ -109,8 +109,8 @@ class CustomFieldsModelUnitTest extends TestCase
     {
         // setup
         $model = new CustomFieldsModel('delete-entity');
-        $model->setConnection(new PdoCrudMock());
-        $model->getConnection()->deleteWasCalledCounter = 0;
+        $model->setConnection($connection = new PdoCrudMock());
+        $connection->deleteWasCalledCounter = 0;
 
         // test body
         $model->deleteCustomFieldsForObject(1, [
@@ -118,7 +118,7 @@ class CustomFieldsModelUnitTest extends TestCase
         ]);
 
         // assertions
-        $this->assertEquals(1, $model->getConnection()->executeWasCalledCounter);
+        $this->assertEquals(1, $connection->executeWasCalledCounter);
     }
 
     /**
@@ -128,14 +128,14 @@ class CustomFieldsModelUnitTest extends TestCase
     {
         // setup
         $model = new CustomFieldsModel('get-entity');
-        $model->setConnection(new PdoCrudMock());
-        $model->getConnection()->selectResults[] = [
+        $model->setConnection($connection = new PdoCrudMock());
+        $connection->selectResults[] = [
             [
                 'field_name' => 'field',
                 'field_value' => true
             ]
         ];
-        $model->getConnection()->selectResults[] = [
+        $connection->selectResults[] = [
             [
                 'field_name' => 'field',
                 'field_value' => true
