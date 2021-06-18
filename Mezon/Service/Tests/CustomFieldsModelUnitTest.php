@@ -5,6 +5,7 @@ use PHPUnit\Framework\TestCase;
 use Mezon\Service\CustomFieldsModel;
 use Mezon\PdoCrud\Tests\PdoCrudMock;
 
+/** @psalm-suppress PropertyNotSetInConstructor */
 class CustomFieldsModelUnitTest extends TestCase
 {
 
@@ -75,10 +76,10 @@ class CustomFieldsModelUnitTest extends TestCase
         $model = new CustomFieldsModel('entity');
         $model->setConnection($connection = new PdoCrudMock());
         $connection->selectResults[] = [
-            $this->customField('existing-field', 1)
+            $this->customField('existing-field', '1')
         ];
         $connection->selectResults[] = [
-            $this->customField('existing-field', 1)
+            $this->customField('existing-field', '1')
         ];
 
         // test body and assertions

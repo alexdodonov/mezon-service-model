@@ -91,7 +91,7 @@ class CustomFieldsModel
      * @param array $filter
      *            List of required fields
      */
-    public function deleteCustomFieldsForObject(int $objectId, array $filter = [])
+    public function deleteCustomFieldsForObject(int $objectId, array $filter = []): void
     {
         if (! empty($filter)) {
             $condition = 'field_name IN ("' . implode('", "', $filter) . '") AND ' . 'object_id = :object_id';

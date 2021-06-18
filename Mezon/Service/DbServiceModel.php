@@ -1,7 +1,6 @@
 <?php
 namespace Mezon\Service;
 
-use Mezon\PdoCrud\ConnectionTrait;
 use Mezon\FieldsSet;
 use Mezon\PdoCrud\ApropriateConnectionTrait;
 
@@ -27,18 +26,38 @@ class DbServiceModel extends ServiceModel
 
     /**
      * Table name
+     *
+     * @var string
      */
     private $tableName = '';
 
     /**
      * Fields algorithms
+     *
+     * @var FieldsSet
      */
-    private $fieldsSet = false;
+    private $fieldsSet = null;
+
+    /**
+     * Method returns $fieldsSet
+     *
+     * @return FieldsSet
+     */
+    private function getFieldSet(): FieldsSet
+    {
+        if ($this->fieldsSet === null) {
+            throw (new \Exception('Field fieldsSet is not setup', - 1));
+        }
+
+        return $this->fieldsSet;
+    }
 
     /**
      * Entity name
+     *
+     * @var string
      */
-    private $entityName = false;
+    private $entityName = '';
 
     /**
      * Constructor
@@ -57,13 +76,12 @@ class DbServiceModel extends ServiceModel
         $this->entityName = $entityName;
 
         if (is_string($fields)) {
-            $this->fieldsSet = new FieldsSet(
-                [
-                    '*' => [
-                        'type' => 'string',
-                        'title' => 'All fields'
-                    ]
-                ]);
+            $this->fieldsSet = new FieldsSet([
+                '*' => [
+                    'type' => 'string',
+                    'title' => 'All fields'
+                ]
+            ]);
         } elseif (is_array($fields)) {
             $this->fieldsSet = new FieldsSet($fields);
         } elseif ($fields instanceof FieldsSet) {
@@ -105,7 +123,7 @@ class DbServiceModel extends ServiceModel
      */
     public function getFieldsNames(): string
     {
-        return implode(', ', $this->fieldsSet->getFieldsNames());
+        return implode(', ', $this->getFieldSet()->getFieldsNames());
     }
 
     /**
@@ -117,7 +135,7 @@ class DbServiceModel extends ServiceModel
      */
     public function hasField(string $fieldName): bool
     {
-        return $this->fieldsSet->hasField($fieldName);
+        return $this->getFieldSet()->hasField($fieldName);
     }
 
     /**
@@ -127,7 +145,7 @@ class DbServiceModel extends ServiceModel
      */
     public function hasCustomFields(): bool
     {
-        return $this->fieldsSet->hasCustomFields();
+        return $this->getFieldSet()->hasCustomFields();
     }
 
     /**
@@ -136,9 +154,9 @@ class DbServiceModel extends ServiceModel
      * @param string $field
      *            Field name
      */
-    public function validateFieldExistance(string $field)
+    public function validateFieldExistance(string $field): void
     {
-        return $this->fieldsSet->validateFieldExistance($field);
+        $this->getFieldSet()->validateFieldExistance($field);
     }
 
     /**
@@ -148,7 +166,7 @@ class DbServiceModel extends ServiceModel
      */
     public function getFields(): array
     {
-        return $this->fieldsSet->getFieldsNames();
+        return $this->getFieldSet()->getFieldsNames();
     }
 
     /**
@@ -170,6 +188,6 @@ class DbServiceModel extends ServiceModel
      */
     public function getFieldType(string $fieldName): string
     {
-        return $this->fieldsSet->getFieldType($fieldName);
+        return $this->getFieldSet()->getFieldType($fieldName);
     }
 }
