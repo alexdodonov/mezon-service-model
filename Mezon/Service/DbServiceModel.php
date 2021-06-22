@@ -34,7 +34,7 @@ class DbServiceModel extends ServiceModel
     /**
      * Fields algorithms
      *
-     * @var FieldsSet
+     * @var ?FieldsSet
      */
     private $fieldsSet = null;
 
