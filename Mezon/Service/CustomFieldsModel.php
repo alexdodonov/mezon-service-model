@@ -1,9 +1,8 @@
 <?php
 namespace Mezon\Service;
 
-use Mezon\PdoCrud\ConnectionTrait;
 use Mezon\Functional\Fetcher;
-use Mezon\PdoCrud\ApropriateConnectionTrait;
+use Mezon\PdoCrud\StaticApropriateConnectionTrait;
 
 /**
  * Class CustomFieldsModel
@@ -23,7 +22,7 @@ use Mezon\PdoCrud\ApropriateConnectionTrait;
 class CustomFieldsModel
 {
 
-    use ApropriateConnectionTrait;
+    use StaticApropriateConnectionTrait;
 
     /**
      * Table name
@@ -66,10 +65,10 @@ class CustomFieldsModel
     {
         $result = [];
 
-        $this->getApropriateConnection()->prepare(
+        self::getApropriateConnection()->prepare(
             'SELECT * FROM ' . $this->getCustomFieldsTemplateName() . ' WHERE object_id = :object_id');
-        $this->getApropriateConnection()->bindParameter(':object_id', $objectId);
-        $customFields = $this->getApropriateConnection()->executeSelect();
+        self::getApropriateConnection()->bindParameter(':object_id', $objectId);
+        $customFields = self::getApropriateConnection()->executeSelect();
 
         foreach ($customFields as $field) {
             $fieldName = Fetcher::getField($field, 'field_name');
@@ -96,10 +95,10 @@ class CustomFieldsModel
         if (! empty($filter)) {
             $condition = 'field_name IN ("' . implode('", "', $filter) . '") AND ' . 'object_id = :object_id';
 
-            $this->getApropriateConnection()->prepare(
+            self::getApropriateConnection()->prepare(
                 'DELETE FROM ' . $this->getCustomFieldsTemplateName() . ' WHERE ' . $condition);
-            $this->getApropriateConnection()->bindParameter(':object_id', $objectId, \PDO::PARAM_INT);
-            $this->getApropriateConnection()->execute();
+            self::getApropriateConnection()->bindParameter(':object_id', $objectId, \PDO::PARAM_INT);
+            self::getApropriateConnection()->execute();
         }
     }
 
@@ -115,14 +114,14 @@ class CustomFieldsModel
      */
     public function updateCustomFieldWithoutValidations(int $objectId, string $fieldName, string $fieldValue): void
     {
-        $this->getApropriateConnection()->prepare(
+        self::getApropriateConnection()->prepare(
             'UPDATE ' . $this->getCustomFieldsTemplateName() .
             ' SET field_value = :field_value WHERE field_name LIKE :field_name AND object_id = :object_id');
-        $this->getApropriateConnection()->bindParameter(':field_value', $fieldValue, \PDO::PARAM_STR);
-        $this->getApropriateConnection()->bindParameter(':field_name', $fieldName, \PDO::PARAM_STR);
-        $this->getApropriateConnection()->bindParameter(':object_id', $objectId, \PDO::PARAM_INT);
+        self::getApropriateConnection()->bindParameter(':field_value', $fieldValue, \PDO::PARAM_STR);
+        self::getApropriateConnection()->bindParameter(':field_name', $fieldName, \PDO::PARAM_STR);
+        self::getApropriateConnection()->bindParameter(':object_id', $objectId, \PDO::PARAM_INT);
 
-        $this->getApropriateConnection()->execute();
+        self::getApropriateConnection()->execute();
     }
 
     /**
@@ -142,13 +141,13 @@ class CustomFieldsModel
         ])) > 0) {
             $this->updateCustomFieldWithoutValidations($objectId, $fieldName, $fieldValue);
         } else {
-            $this->getApropriateConnection()->prepare(
+            self::getApropriateConnection()->prepare(
                 'INSERT INTO ' . $this->getCustomFieldsTemplateName() .
                 ' (field_value, field_name, object_id) VALUES (:field_value, :field_name, :object_id)');
-            $this->getApropriateConnection()->bindParameter(':field_value', $fieldValue, \PDO::PARAM_STR);
-            $this->getApropriateConnection()->bindParameter(':field_name', $fieldName, \PDO::PARAM_STR);
-            $this->getApropriateConnection()->bindParameter(':object_id', $objectId, \PDO::PARAM_INT);
-            $this->getApropriateConnection()->execute();
+            self::getApropriateConnection()->bindParameter(':field_value', $fieldValue, \PDO::PARAM_STR);
+            self::getApropriateConnection()->bindParameter(':field_name', $fieldName, \PDO::PARAM_STR);
+            self::getApropriateConnection()->bindParameter(':object_id', $objectId, \PDO::PARAM_INT);
+            self::getApropriateConnection()->execute();
         }
     }
 
@@ -185,13 +184,13 @@ class CustomFieldsModel
      */
     public function getFieldForObject(int $objectId, string $fieldName, string $defaultValue): string
     {
-        $this->getApropriateConnection()->prepare(
+        self::getApropriateConnection()->prepare(
             'SELECT * FROM ' . $this->getCustomFieldsTemplateName() .
             ' WHERE object_id = :object_id AND field_name LIKE :field_name');
-        $this->getApropriateConnection()->bindParameter(':object_id', $objectId);
-        $this->getApropriateConnection()->bindParameter(':field_name', $fieldName, \PDO::PARAM_STR);
+        self::getApropriateConnection()->bindParameter(':object_id', $objectId);
+        self::getApropriateConnection()->bindParameter(':field_name', $fieldName, \PDO::PARAM_STR);
 
-        $customField = $this->getApropriateConnection()->executeSelect();
+        $customField = self::getApropriateConnection()->executeSelect();
 
         if (empty($customField)) {
             // field was not found

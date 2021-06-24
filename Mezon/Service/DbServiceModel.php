@@ -2,7 +2,7 @@
 namespace Mezon\Service;
 
 use Mezon\FieldsSet;
-use Mezon\PdoCrud\ApropriateConnectionTrait;
+use Mezon\PdoCrud\StaticApropriateConnectionTrait;
 
 /**
  * Class DbServiceModel
@@ -22,7 +22,7 @@ use Mezon\PdoCrud\ApropriateConnectionTrait;
 class DbServiceModel extends ServiceModel
 {
 
-    use ApropriateConnectionTrait;
+    use StaticApropriateConnectionTrait;
 
     /**
      * Table name
