@@ -95,7 +95,7 @@ class DbServiceModel extends ServiceModel
      * Method sets table name
      *
      * @param string $tableName
-     *            Table name
+     *            table name
      */
     protected function setTableName(string $tableName = ''): void
     {
@@ -130,7 +130,7 @@ class DbServiceModel extends ServiceModel
      * Method returns true if the field exists
      *
      * @param string $fieldName
-     *            Field name
+     *            field name
      * @return bool
      */
     public function hasField(string $fieldName): bool
@@ -162,7 +162,7 @@ class DbServiceModel extends ServiceModel
     /**
      * Method returns fields list
      *
-     * @return array Fields list
+     * @return string[] fields list
      */
     public function getFields(): array
     {
@@ -172,7 +172,7 @@ class DbServiceModel extends ServiceModel
     /**
      * Method returns entity name
      *
-     * @return string Entity name
+     * @return string entity name
      */
     public function getEntityName(): string
     {

@@ -4,8 +4,12 @@ namespace Mezon\Service\Tests;
 use PHPUnit\Framework\TestCase;
 use Mezon\Service\CustomFieldsModel;
 use Mezon\PdoCrud\Tests\PdoCrudMock;
+use Mezon\PdoCrud\PdoCrud;
 
-/** @psalm-suppress PropertyNotSetInConstructor */
+/**
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
+ */
 class CustomFieldsModelUnitTest extends TestCase
 {
 
@@ -191,7 +195,7 @@ class CustomFieldsModelUnitTest extends TestCase
         return [
             // #0, the first case - field does not exist
             [
-                function (): object {
+                function (): PdoCrudMock {
                     // setup method
                     $connection = new PdoCrudMock();
                     $connection->selectResults[] = [];
@@ -205,7 +209,7 @@ class CustomFieldsModelUnitTest extends TestCase
             ],
             // #1, the first case - field exists
             [
-                function (): object {
+                function (): PdoCrudMock {
                     // setup method
                     $connection = new PdoCrudMock();
                     $connection->selectResults[] = [
@@ -228,7 +232,7 @@ class CustomFieldsModelUnitTest extends TestCase
     /**
      * Testing method setFieldForObject
      *
-     * @param callable $setup
+     * @param callable():PdoCrud $setup
      *            setup method
      * @param callable $assertions
      *            assertion method
