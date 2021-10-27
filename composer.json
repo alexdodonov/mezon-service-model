@@ -16,7 +16,7 @@
 	},
 	"require": {
 		"php": ">=7.2.0",
-		"mezon/pdocrud": ">=1.2.1 <1.3.0",
+		"mezon/pdocrud": "1.3.*",
 		"mezon/fields-set": "1.0.*",
 		"mezon/functional": "1.0.*",
 		"mezon/conf": "1.0.*"
