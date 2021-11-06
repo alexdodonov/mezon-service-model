@@ -115,7 +115,6 @@ class CustomFieldsModelUnitTest extends TestCase
         // setup
         $model = new CustomFieldsModel('delete-entity');
         $model->setConnection($connection = new PdoCrudMock());
-        $connection->deleteWasCalledCounter = 0;
 
         // test body
         $model->deleteCustomFieldsForObject(1, [
