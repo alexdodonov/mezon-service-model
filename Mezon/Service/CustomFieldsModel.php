@@ -2,7 +2,7 @@
 namespace Mezon\Service;
 
 use Mezon\Functional\Fetcher;
-use Mezon\PdoCrud\StaticApropriateConnectionTrait;
+use Mezon\PdoCrud\ApropriateConnectionTrait;
 
 /**
  * Class CustomFieldsModel
@@ -22,7 +22,7 @@ use Mezon\PdoCrud\StaticApropriateConnectionTrait;
 class CustomFieldsModel
 {
 
-    use StaticApropriateConnectionTrait;
+    use ApropriateConnectionTrait;
 
     /**
      * Table name
@@ -57,7 +57,7 @@ class CustomFieldsModel
      *            Object id
      * @param array $filter
      *            List of required fields or all
-     * @return array Result of the fetching
+     * @return array<string, string> Result of the fetching
      */
     public function getCustomFieldsForObject(int $objectId, array $filter = [
         '*'
@@ -156,7 +156,7 @@ class CustomFieldsModel
      *
      * @param array $records
      *            List of records
-     * @return array Transformed records
+     * @return list<object> Transformed records
      */
     public function getCustomFieldsForRecords(array $records): array
     {

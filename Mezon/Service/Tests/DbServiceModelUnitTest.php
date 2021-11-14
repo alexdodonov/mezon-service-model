@@ -76,7 +76,7 @@ class DbServiceModelUnitTest extends TestCase
         $this->expectException(\Exception::class);
 
         // test body
-        $model = new DbServiceModel(new \stdClass(), 'entity_name');
+        new DbServiceModel(new \stdClass(), 'entity_name');
     }
 
     /**
