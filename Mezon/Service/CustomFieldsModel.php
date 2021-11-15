@@ -3,6 +3,7 @@ namespace Mezon\Service;
 
 use Mezon\Functional\Fetcher;
 use Mezon\PdoCrud\ApropriateConnectionTrait;
+use Mezon\Functional\Functional;
 
 /**
  * Class CustomFieldsModel
@@ -167,7 +168,7 @@ class CustomFieldsModel
                 throw (new \Exception('Field "id" was not found in record', - 1));
             }
 
-            $records[$i]['custom'] = $this->getCustomFieldsForObject($id);
+            Functional::setField($records[$i], 'custom', $this->getCustomFieldsForObject($id));
         }
 
         return $records;
