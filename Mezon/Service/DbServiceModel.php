@@ -62,12 +62,13 @@ class DbServiceModel extends ServiceModel
     /**
      * Constructor
      *
-     * @param mixed $fields
-     *            fields of the model
+     * @param
+     *            string|FieldsSet|array<string, array{type: string, title: string}> $fields fields of the model
      * @param string $tableName
      *            name of the table
      * @param string $entityName
      *            name of the entity
+     * @psalm-suppress MissingParamType
      */
     public function __construct($fields = '*', string $tableName = '', string $entityName = '')
     {
@@ -83,6 +84,7 @@ class DbServiceModel extends ServiceModel
                 ]
             ]);
         } elseif (is_array($fields)) {
+            /** @var array<string, array{type: string, title: string}> $fields */
             $this->fieldsSet = new FieldsSet($fields);
         } elseif ($fields instanceof FieldsSet) {
             $this->fieldsSet = $fields;

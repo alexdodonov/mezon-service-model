@@ -55,10 +55,11 @@ class CustomFieldsModel
      * Getting custom fields for object
      *
      * @param int $objectId
-     *            Object id
+     *            object id
      * @param array $filter
-     *            List of required fields or all
-     * @return array<string, string> Result of the fetching
+     *            list of required fields or all
+     * @return array<string, string> result of the fetching
+     * @psalm-suppress MixedReturnTypeCoercion, MixedArrayOffset, MixedAssignment
      */
     public function getCustomFieldsForObject(int $objectId, array $filter = [
         '*'
@@ -87,9 +88,9 @@ class CustomFieldsModel
      * Deleting custom fields for object
      *
      * @param int $objectId
-     *            Object id
-     * @param array $filter
-     *            List of required fields
+     *            object id
+     * @param string[] $filter
+     *            list of required fields
      */
     public function deleteCustomFieldsForObject(int $objectId, array $filter = []): void
     {
@@ -107,11 +108,11 @@ class CustomFieldsModel
      * Method updates custom field without any validations
      *
      * @param int $objectId
-     *            Object id
+     *            object id
      * @param string $fieldName
-     *            Field name
+     *            field name
      * @param string $fieldValue
-     *            Field value
+     *            field value
      */
     public function updateCustomFieldWithoutValidations(int $objectId, string $fieldName, string $fieldValue): void
     {
@@ -129,11 +130,11 @@ class CustomFieldsModel
      * Method sets custom field
      *
      * @param int $objectId
-     *            Object id
+     *            object id
      * @param string $fieldName
-     *            Field name
+     *            field name
      * @param string $fieldValue
-     *            Field value
+     *            field value
      */
     public function setFieldForObject(int $objectId, string $fieldName, string $fieldValue): void
     {
@@ -156,19 +157,21 @@ class CustomFieldsModel
      * Method fetches custom fields for record
      *
      * @param array $records
-     *            List of records
-     * @return list<object> Transformed records
+     *            list of records
+     * @return array transformed records
      */
     public function getCustomFieldsForRecords(array $records): array
     {
+        /** @var array|object $record */
         foreach ($records as $i => $record) {
+            /** @var string|null $id */
             $id = Fetcher::getField($record, 'id');
 
             if ($id === null) {
                 throw (new \Exception('Field "id" was not found in record', - 1));
             }
 
-            Functional::setField($records[$i], 'custom', $this->getCustomFieldsForObject($id));
+            Functional::setField($records[$i], 'custom', $this->getCustomFieldsForObject((int) $id));
         }
 
         return $records;
@@ -178,9 +181,9 @@ class CustomFieldsModel
      * Method sets custom field for object
      *
      * @param int $objectId
-     *            - object's id
+     *            object's id
      * @param string $fieldName
-     *            - field's name
+     *            field's name
      * @return string field's value
      */
     public function getFieldForObject(int $objectId, string $fieldName, string $defaultValue): string
@@ -191,6 +194,7 @@ class CustomFieldsModel
         static::getApropriateConnection()->bindParameter(':object_id', $objectId);
         static::getApropriateConnection()->bindParameter(':field_name', $fieldName, \PDO::PARAM_STR);
 
+        /** @var list<object{field_value:string}> $customField */
         $customField = static::getApropriateConnection()->executeSelect();
 
         if (empty($customField)) {

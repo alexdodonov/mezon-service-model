@@ -55,6 +55,7 @@ class CustomFieldsModelUnitTest extends TestCase
      * @param string $expectedResult
      *            expected result of the call getFieldForObject
      * @dataProvider getFieldForObjectDataProvider
+     * @psalm-suppress MixedPropertyTypeCoercion
      */
     public function testGetExistingCustomField(array $data, string $expectedResult): void
     {

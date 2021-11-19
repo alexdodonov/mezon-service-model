@@ -13,7 +13,7 @@ class DbServiceModelUnitTest extends TestCase
     /**
      * Method returns field set
      *
-     * @return array field set
+     * @return array<string, array{type?: string}> field set
      */
     private function getFieldSet(): array
     {
