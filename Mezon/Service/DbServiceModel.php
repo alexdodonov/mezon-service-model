@@ -34,23 +34,9 @@ class DbServiceModel extends ServiceModel
     /**
      * Fields algorithms
      *
-     * @var ?FieldsSet
+     * @var FieldsSet
      */
-    private $fieldsSet = null;
-
-    /**
-     * Method returns $fieldsSet
-     *
-     * @return FieldsSet
-     */
-    private function getFieldSet(): FieldsSet
-    {
-        if ($this->fieldsSet === null) {
-            throw (new \Exception('Field fieldsSet is not setup', - 1));
-        }
-
-        return $this->fieldsSet;
-    }
+    private $fieldsSet;
 
     /**
      * Entity name
@@ -125,7 +111,7 @@ class DbServiceModel extends ServiceModel
      */
     public function getFieldsNames(): string
     {
-        return implode(', ', $this->getFieldSet()->getFieldsNames());
+        return implode(', ', $this->fieldsSet->getFieldsNames());
     }
 
     /**
@@ -137,7 +123,7 @@ class DbServiceModel extends ServiceModel
      */
     public function hasField(string $fieldName): bool
     {
-        return $this->getFieldSet()->hasField($fieldName);
+        return $this->fieldsSet->hasField($fieldName);
     }
 
     /**
@@ -147,7 +133,7 @@ class DbServiceModel extends ServiceModel
      */
     public function hasCustomFields(): bool
     {
-        return $this->getFieldSet()->hasCustomFields();
+        return $this->fieldsSet->hasCustomFields();
     }
 
     /**
@@ -158,7 +144,7 @@ class DbServiceModel extends ServiceModel
      */
     public function validateFieldExistance(string $field): void
     {
-        $this->getFieldSet()->validateFieldExistance($field);
+        $this->fieldsSet->validateFieldExistance($field);
     }
 
     /**
@@ -168,7 +154,7 @@ class DbServiceModel extends ServiceModel
      */
     public function getFields(): array
     {
-        return $this->getFieldSet()->getFieldsNames();
+        return $this->fieldsSet->getFieldsNames();
     }
 
     /**
@@ -190,6 +176,6 @@ class DbServiceModel extends ServiceModel
      */
     public function getFieldType(string $fieldName): string
     {
-        return $this->getFieldSet()->getFieldType($fieldName);
+        return $this->fieldsSet->getFieldType($fieldName);
     }
 }
