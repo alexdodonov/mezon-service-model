@@ -1,0 +1,37 @@
+{
+	"source": {
+		"directories": [
+			"./Mezon/*/"
+		],
+		"excludes": [
+			"Tests"
+		]
+	},
+	"phpUnit": {
+		"customPath": ".\/vendor\/phpunit\/phpunit\/phpunit"
+	},
+	"logs": {
+		"text": ".\/tmp\/infection-text.txt",
+		"summary": "\/tmp\/summary-log.txt",
+		"debug": "\/tmp\/debug-log.txt",
+		"perMutator": "\/tmp\/per-mutator-log.txt"
+	},
+	"mutators": {
+		"@default": true,
+		"DecrementInteger": {
+			"ignore": [
+				"Mezon\\Rules\\AnyRuleFromSet::validate::32"
+			]
+		},
+		"GreaterThan": {
+			"ignore": [
+				"Mezon\\Rules\\AnyRuleFromSet::validate::41"
+			]
+		},
+		"LogicalAnd": {
+			"ignore": [
+				"Mezon\\Rules\\MoreThanOneCharFromSet::validate::54"
+			]
+		}
+	}
+}

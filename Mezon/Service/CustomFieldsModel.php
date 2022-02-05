@@ -12,7 +12,7 @@ use Mezon\Functional\Functional;
  * @subpackage CustomFieldsModel
  * @author Dodonov A.A.
  * @version v.1.0 (2019/11/08)
- * @copyright Copyright (c) 2019, aeon.org
+ * @copyright Copyright (c) 2019, http://aeon.su
  */
 
 /**

@@ -2,7 +2,6 @@
 namespace Mezon\Service;
 
 use Mezon\FieldsSet;
-use Mezon\PdoCrud\ApropriateConnectionTrait;
 
 /**
  * Class DbServiceModel
@@ -11,7 +10,7 @@ use Mezon\PdoCrud\ApropriateConnectionTrait;
  * @subpackage DbServiceModel
  * @author Dodonov A.A.
  * @version v.1.0 (2019/10/18)
- * @copyright Copyright (c) 2019, aeon.org
+ * @copyright Copyright (c) 2019, http://aeon.su
  */
 
 /**
@@ -19,17 +18,8 @@ use Mezon\PdoCrud\ApropriateConnectionTrait;
  *
  * @author Dodonov A.A.
  */
-class DbServiceModel extends ServiceModel
+class DbServiceModel extends DbServiceModelBase
 {
-
-    use ApropriateConnectionTrait;
-
-    /**
-     * Table name
-     *
-     * @var string
-     */
-    private $tableName = '';
 
     /**
      * Fields algorithms
@@ -58,7 +48,7 @@ class DbServiceModel extends ServiceModel
      */
     public function __construct($fields = '*', string $tableName = '', string $entityName = '')
     {
-        $this->setTableName($tableName);
+        parent::__construct($tableName);
 
         $this->entityName = $entityName;
 
@@ -77,31 +67,6 @@ class DbServiceModel extends ServiceModel
         } else {
             throw (new \Exception('Invalid fields description', - 1));
         }
-    }
-
-    /**
-     * Method sets table name
-     *
-     * @param string $tableName
-     *            table name
-     */
-    protected function setTableName(string $tableName = ''): void
-    {
-        if (strpos($tableName, '-') !== false && strpos($tableName, '`') === false) {
-            $tableName = "`$tableName`";
-        }
-
-        $this->tableName = $tableName;
-    }
-
-    /**
-     * Method returns table name
-     *
-     * @return string table name
-     */
-    public function getTableName(): string
-    {
-        return $this->tableName;
     }
 
     /**
@@ -145,7 +110,10 @@ class DbServiceModel extends ServiceModel
     public function validateFieldExistance(string $field): void
     {
         $this->fieldsSet->validateFieldExistance($field);
+        // @codeCoverageIgnoreStart
     }
+
+    // @codeCoverageIgnoreEnd
 
     /**
      * Method returns fields list
