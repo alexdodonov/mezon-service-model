@@ -1,31 +1,26 @@
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/8.4/phpunit.xsd"
-	backupGlobals="false" colors="true" bootstrap='./vendor/autoload.php'>
-	<php>
-		<ini name="error_reporting" value="-1" />
-	</php>
-
-	<testsuites>
-		<testsuite name="all">
-			<directory suffix="UnitTest.php">./Mezon/</directory>
-			<directory suffix="UnitTest.php">./vendor/mezon/</directory>
-		</testsuite>
-	</testsuites>
-
-	<filter>
-		<whitelist addUncoveredFilesFromWhitelist="false">
-			<directory>./</directory>
-			<exclude>
-				<directory suffix=".php">./Mezon/Service/Tests</directory>
-				<directory>./vendor</directory>
-			</exclude>
-		</whitelist>
-	</filter>
-
-	<logging>
-		<log type="coverage-html"
-			target="./tmp/coverage-phpunit.html"></log>
-		<log type="coverage-text" target="php://stdout"
-			showOnlySummary="true"></log>
-	</logging>
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" backupGlobals="false" colors="true" bootstrap="./vendor/autoload.php">
+  <coverage includeUncoveredFiles="false">
+    <include>
+      <directory>./</directory>
+    </include>
+    <exclude>
+      <directory suffix=".php">./Mezon/Service/Tests</directory>
+      <directory>./vendor</directory>
+    </exclude>
+    <report>
+      <html outputDirectory="./tmp/coverage-phpunit.html"/>
+      <text outputFile="php://stdout" showOnlySummary="true"/>
+    </report>
+  </coverage>
+  <php>
+    <ini name="error_reporting" value="-1"/>
+  </php>
+  <testsuites>
+    <testsuite name="all">
+      <directory suffix="UnitTest.php">./Mezon/</directory>
+      <directory suffix="UnitTest.php">./vendor/mezon/</directory>
+    </testsuite>
+  </testsuites>
+  <logging/>
 </phpunit>

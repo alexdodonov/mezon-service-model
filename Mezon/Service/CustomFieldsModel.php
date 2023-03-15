@@ -46,7 +46,7 @@ class CustomFieldsModel
      *
      * @return string Table name
      */
-    protected function getCustomFieldsTemplateName(): string
+    private function getCustomFieldsTemplateName(): string
     {
         return $this->tableName . '_custom_field';
     }

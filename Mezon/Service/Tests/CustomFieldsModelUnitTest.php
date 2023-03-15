@@ -13,25 +13,13 @@ class CustomFieldsModelUnitTest extends TestCase
 {
 
     /**
-     * Data compilator
-     */
-    protected function customField(string $fieldName, string $fieldValue): array
-    {
-        return [
-            'field_name' => $fieldName,
-            'field_value' => $fieldValue
-        ];
-    }
-
-    /**
      * Data provider
      *
      * @return array testing data
      */
     public function getFieldForObjectDataProvider(): array
     {
-        $obj = new \stdClass();
-        $obj->field_value = '111';
+        $obj = CustomFieldsModelUnitTestUtilities::customField();
 
         return [
             [
@@ -42,7 +30,7 @@ class CustomFieldsModelUnitTest extends TestCase
                 [
                     $obj
                 ],
-                '111'
+                'value'
             ]
         ];
     }
@@ -79,11 +67,13 @@ class CustomFieldsModelUnitTest extends TestCase
         // setup
         $model = new CustomFieldsModel('entity');
         $model->setConnection($connection = new PdoCrudMock());
+        // TODO make CustomFieldsModelUnitTestUtilities::setup... method
         $connection->selectResults[] = [
-            $this->customField('existing-field', '1')
+            CustomFieldsModelUnitTestUtilities::customField('existing-field', '1')
         ];
+        // TODO make CustomFieldsModelUnitTestUtilities::setup... method
         $connection->selectResults[] = [
-            $this->customField('existing-field', '1')
+            CustomFieldsModelUnitTestUtilities::customField('existing-field', '1')
         ];
 
         // test body and assertions
@@ -133,7 +123,8 @@ class CustomFieldsModelUnitTest extends TestCase
         // setup
         $model = new CustomFieldsModel('get-entity');
         $model->setConnection($connection = new PdoCrudMock());
-        $field = $this->customField('field', '1');
+        // TODO make CustomFieldsModelUnitTestUtilities::setup... method
+        $field = CustomFieldsModelUnitTestUtilities::customField('field', '1');
         $connection->selectResults[] = [
             $field
         ];
@@ -155,8 +146,9 @@ class CustomFieldsModelUnitTest extends TestCase
         $result = $model->getCustomFieldsForRecords($records);
 
         // assertions
-        $this->assertObjectHasAttribute('custom', $result[0]);
-        $this->assertObjectHasAttribute('custom', $result[1]);
+        $this->assertTrue(property_exists($result[0], 'custom'));
+        $this->assertTrue(property_exists($result[1], 'custom'));
+
         $this->assertArrayHasKey('field', $result[0]->custom);
         $this->assertArrayHasKey('field', $result[1]->custom);
         $this->assertEquals('1', $result[0]->custom['field']);
@@ -209,7 +201,7 @@ class CustomFieldsModelUnitTest extends TestCase
                     // setup method
                     $connection = new PdoCrudMock();
                     $connection->selectResults[] = [
-                        $this->customField('setting-field', '1')
+                        CustomFieldsModelUnitTestUtilities::customField('setting-field', '1')
                     ];
 
                     return $connection;
